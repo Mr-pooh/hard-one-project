@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+
 module.exports = {
   entry: { main: './src/pages/index.js'},
   output: {
@@ -35,18 +36,24 @@ module.exports = {
         test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
         type: 'asset/resource'
       },
+			{
+				test: /\.s[ac]ss$/i,
+				use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader', {
+					loader: 'sass-loader',
+					options: {
+						sassOptions:{
+							includePaths: ['src/scss']
+						}
+					}
+				}
+				]
+			},
       {
         // применять это правило только к CSS-файлам
         test: /\.css$/,
         // при обработке этих файлов нужно использовать
         // MiniCssExtractPlugin.loader и css-loader
-        use: [MiniCssExtractPlugin.loader, {
-          loader: 'css-loader',
-          options: { 
-            importLoaders: 1 
-          }
-        },
-        'postcss-loader']
+        use: [MiniCssExtractPlugin.loader, 'css-loader', 'postcss-loader']
       }
       ]
   },
